@@ -343,7 +343,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://coolvr.top/2018/12/18/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://coolvr.top/2018/12/18/article/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="禾禾果">
@@ -363,7 +363,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/12/18/hello-world/" class="post-title-link" itemprop="http://coolvr.top/index.html">Hello World</a>
+                <a href="/2018/12/18/article/" class="post-title-link" itemprop="http://coolvr.top/index.html">第一测试文章，Retrofit 2.0文件上传</a>
               
             
           </h1>
@@ -388,9 +388,13 @@
                 
               
 
-              <time title="创建时间：2018-12-18 14:38:40" itemprop="dateCreated datePublished" datetime="2018-12-18T14:38:40+08:00">2018-12-18</time>
+              <time title="创建时间：2018-12-18 17:43:41 / 修改时间：17:57:14" itemprop="dateCreated datePublished" datetime="2018-12-18T17:43:41+08:00">2018-12-18</time>
             
 
+            
+              
+
+              
             
           </span>
 
@@ -424,15 +428,10 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+            <p>使用Retrofit进行文件上传，肯定离不开Part &amp; PartMap</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FileUploadService</span> </span>&#123;  </span><br><span class="line">    <span class="meta">@Multipart</span></span><br><span class="line">    <span class="meta">@POST</span>(<span class="string">"upload"</span>)</span><br><span class="line">    <span class="function">Call&lt;ResponseBody&gt; <span class="title">upload</span><span class="params">(@Part(@Part MultipartBody.Part file)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Multipart，后面只需要在参数中增加 Part 就可以了。也许你会问，这里的 Part 和 Field 究竟有什么区别，其实从功能上讲，无非就是客户端向服务端发起请求携带参数的方式不同，并且前者可以携带的参数类型更加丰富，包括数据流。也正是因为这一点，我们可以通过这种方式来上传文件，下面我们就给出这个接口的使用方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/先创建 service</span><br><span class="line">FileUploadService service = retrofit.create(FileUploadService.class);</span><br><span class="line"><span class="comment">//构建要上传的文件</span></span><br><span class="line">File file = <span class="keyword">new</span> File(filename);</span><br><span class="line">RequestBody requestFile = RequestBody.create(MediaType.parse(<span class="string">"multipart/form-data"</span>), file);</span><br><span class="line">MultipartBody.Part body = MultipartBody.Part.createFormData(<span class="string">"file"</span>, file.getName(), requestFile);</span><br><span class="line">Call&lt;ResponseBody&gt; call = service.upload(body);</span><br><span class="line">call.enqueue(<span class="keyword">new</span> Callback&lt;ResponseBody&gt;() &#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;ResponseBody&gt; call,</span></span></span><br><span class="line"><span class="function"><span class="params">                         Response&lt;ResponseBody&gt; response)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">"success"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;ResponseBody&gt; call, Throwable t)</span> </span>&#123;</span><br><span class="line">    t.printStackTrace();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
           
         
@@ -525,6 +524,19 @@
 
               
 
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">标签</span>
+                  
+                </div>
               
             </nav>
           
